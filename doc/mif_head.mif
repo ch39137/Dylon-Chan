@@ -1,0 +1,11 @@
+-- Copyright (C) 2015-Endless, CrazyBird Corporation
+-- Thank you for use CrazyBird's design tools
+
+DEPTH = 786432;
+WIDTH = 8;
+ADDRESS_RADIX = UNS;
+DATA_RADIX = HEX;
+
+CONTENT BEGIN
+
+END;
