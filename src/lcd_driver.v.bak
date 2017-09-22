@@ -1,0 +1,11 @@
+/*----------------------------------------------------------
+Author					:				Dylon Chan
+E-mail					:				chenh@sari.ac.cn
+Filename					:				lcd_driver.v
+Date						:				2017-09-22
+Description				:				LCD/VGA driver parameter
+Modification history	:
+Data				By				Version			Change Description
+============================================================
+2017/09/22		Dylon Chan	1.0				Original
+------------------------------------------------------------*/
