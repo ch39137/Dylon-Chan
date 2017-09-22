@@ -1,0 +1,87 @@
+/*----------------------------------------------------------
+Author					:				Dylon Chan
+E-mail					:				chenh@sari.ac.cn
+Filename					:				DVI_GVGA.v
+Date						:				2017-09-22
+Description				:				LCD/VGA driver parameter
+Modification history	:
+Data				By				Version			Change Description
+============================================================
+2017/09/22		Dylon Chan	1.0				Original
+------------------------------------------------------------*/ 
+
+`timescale 1ns/1ns
+module VGA_Display_Test
+(
+	//global clock 50MHz
+	input			clk,			//50MHz
+	input			rst_n,			//global reset
+	
+	//lcd interface
+	output			lcd_dclk,		//lcd pixel clock			
+	output			lcd_hs,			//lcd horizontal sync 
+	output			lcd_vs,			//lcd vertical sync
+//	output			lcd_sync,		//lcd sync
+	output			lcd_blank,		//lcd blank(L:blank)
+	output	[7:0]	lcd_red,		//lcd red data
+	output	[7:0]	lcd_green,		//lcd green data
+	output	[7:0]	lcd_blue		//lcd blue data
+);
+
+//----------------------------------
+//sync global clock and reset signal
+wire	clk_ref;
+wire	sys_rst_n;
+system_ctrl_pll	u_system_ctrl_pll
+(
+	.clk			(clk),			//50MHz
+	.rst_n			(rst_n),		//global reset
+
+	.clk_c0			(clk_ref),		//vga clock	
+	.sys_rst_n		(sys_rst_n)		//system reset
+);
+wire	clk_vga = clk_ref;
+
+//-------------------------------------
+//LCD driver timing
+wire	[10:0]	lcd_xpos;		//lcd horizontal coordinate
+wire	[10:0]	lcd_ypos;		//lcd vertical coordinate
+wire	[23:0]	lcd_data;		//lcd data
+lcd_driver u_lcd_driver
+(
+	//global clock
+	.clk			(clk_vga),		
+	.rst_n			(sys_rst_n), 
+	 
+	 //lcd interface
+	.lcd_dclk		(lcd_dclk),
+	.lcd_blank		(lcd_blank),
+	.lcd_sync		(),		    	
+	.lcd_hs			(lcd_hs),		
+	.lcd_vs			(lcd_vs),
+	.lcd_en			(),		
+	.lcd_rgb		({lcd_red, lcd_green ,lcd_blue}),
+
+	
+	//user interface
+	.lcd_request	(),
+	.lcd_data		(lcd_data),	
+	.lcd_xpos		(lcd_xpos),	
+	.lcd_ypos		(lcd_ypos)
+);
+
+//-------------------------------------
+//lcd data simulation
+lcd_display	u_lcd_display
+(
+	//global clock
+	.clk			(clk_vga),		
+	.rst_n			(sys_rst_n), 
+	
+	.lcd_xpos		(lcd_xpos),	
+	.lcd_ypos		(lcd_ypos),
+	.lcd_data		(lcd_data)
+);
+
+
+endmodule
